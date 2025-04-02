@@ -21,6 +21,16 @@ public class TransactionResource {
     public List<Transaction> listAll() {
         return Transaction.listAll();
     }
+    
+    @GET
+    @Path("/{id}")
+    public Transaction findById(@PathParam("id") Long id) {
+        Transaction transaction = Transaction.findById(id);
+        if (transaction == null) {
+            throw new NotFoundException("Transação não encontrada com o ID: " + id);
+        }
+        return transaction;
+    }
 
     @POST
     @Transactional
