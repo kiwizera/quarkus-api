@@ -1,19 +1,16 @@
--- Inserting products for testing purposes
-INSERT INTO Product(id, name, email, password) VALUES (
+INSERT INTO Transaction(id, name, transactionTypeId, transactionDate, amount, category) VALUES (
     1, 
-    'João', 
-    'joao@email.com', 
-    'j123'
+    'Ifood', 
+    0, 
+    '2025-03-26', 
+    -52.00, 
+    'Food'
 );
-INSERT INTO Product(id, name, email, password) VALUES (
+INSERT INTO Transaction(id, name, transactionTypeId, transactionDate, amount, category) VALUES (
     2, 
-    'Edson', 
-    'edson@email.com', 
-    'e123'
-);
-INSERT INTO Product(id, name, email, password) VALUES (
-    3, 
-    'Caio', 
-    'caio@email.com', 
-    'c123'
+    'Salary', 
+    1, 
+    '2025-03-27', 
+    5300.00, 
+    'Salary'
 );
