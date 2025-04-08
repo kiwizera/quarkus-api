@@ -16,6 +16,6 @@ class TransactionResourceTest {
             .when().get("/transactions")
             .then()
                 .statusCode(200)
-                .body(is("[]")); // Assuming no transactions are present initially
+                .body(is("[{\"id\":1,\"name\":\"Ifood\",\"transactionTypeId\":0,\"transactionDate\":\"2025-03-26\",\"amount\":-52.0,\"category\":\"Food\"},{\"id\":2,\"name\":\"Salary\",\"transactionTypeId\":1,\"transactionDate\":\"2025-03-27\",\"amount\":5300.0,\"category\":\"Salary\"}]"));
     }
 }
