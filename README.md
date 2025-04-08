@@ -1,77 +1,169 @@
-# quarkus-api
+# Quarkus API - Transaction Management
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Esta é uma API desenvolvida com o framework Quarkus para gerenciar transações financeiras. A API fornece endpoints para criar, listar, atualizar e excluir transações.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Endpoints
 
-## Running the application in dev mode
+### Listar todas as transações
+**GET** `/transactions`  
+Retorna uma lista de todas as transações.
 
-You can run your application in dev mode that enables live coding using:
-
-```shell script
-./mvnw quarkus:dev
+**Resposta de exemplo:**
+```json
+[
+  {
+    "id": 1,
+    "name": "Compra no supermercado",
+    "transactionTypeId": 2,
+    "transactionDate": "2023-10-01",
+    "amount": 150.75,
+    "category": "Alimentação"
+  }
+]
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+---
 
-## Packaging and running the application
+### Buscar transação por ID
+**GET** `/transactions/{id}`  
+Retorna uma lista com transações de um tipo específico.
 
-The application can be packaged using:
+**Parâmetros:**
+- `transactionTypeId` (Integer): ID do tipo da transação.
 
-```shell script
-./mvnw package
+**Resposta de exemplo:**
+```json
+[
+  {
+    "id": 1,
+    "name": "Compra no supermercado",
+    "transactionTypeId": 0,
+    "transactionDate": "2023-10-01",
+    "amount": -150.75,
+    "category": "Alimentação"
+  },
+  {
+    "id": 2,
+    "name": "Ifood",
+    "transactionTypeId": 0,
+    "transactionDate": "2025-03-26",
+    "amount": -52.0,
+    "category": "Food"
+  }
+]
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+---
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### Criar uma nova transação
+**POST** `/transactions`  
+Cria uma nova transação.
 
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+**Corpo da requisição:**
+```json
+{
+  "name": "Compra no supermercado",
+  "transactionTypeId": 0,
+  "transactionDate": "2023-10-01",
+  "amount": -150.75,
+  "category": "Alimentação"
+}
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+**Resposta de exemplo:**
+- Status: `201 Created`
+- Corpo: A transação criada.
 
-## Creating a native executable
+---
 
-You can create a native executable using:
+### Atualizar uma transação existente
+**PUT** `/transactions/{id}`  
+Atualiza os dados de uma transação existente.
 
-```shell script
-./mvnw package -Dnative
+**Parâmetros:**
+- `id` (Long): ID da transação.
+
+**Corpo da requisição:**
+```json
+{
+  "name": "Compra no supermercado atualizada",
+  "transactionTypeId": 0,
+  "transactionDate": "2023-10-02",
+  "amount": -200.00,
+  "category": "Lazer"
+}
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+**Resposta de exemplo:**
+```json
+{
+  "name": "Compra no supermercado atualizada",
+  "transactionTypeId": 0,
+  "transactionDate": "2023-10-02",
+  "amount": -200.00,
+  "category": "Lazer"
+}
 ```
 
-You can then execute your native executable with: `./target/quarkus-api-1.0.0-SNAPSHOT-runner`
+---
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+### Excluir uma transação
+**DELETE** `/transactions/{id}`  
+Exclui uma transação pelo ID.
 
-## Related Guides
+**Parâmetros:**
+- `id` (Long): ID da transação.
 
-- JDBC Driver - H2 ([guide](https://quarkus.io/guides/datasource)): Connect to the H2 database via JDBC
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- RESTEasy Classic ([guide](https://quarkus.io/guides/resteasy)): REST endpoint framework implementing Jakarta REST and more
+**Resposta de exemplo:**
+- Status: `204 No Content`
 
-## Provided Code
+---
 
-### Hibernate ORM
+## Como executar o projeto
 
-Create your first JPA entity
+### Pré-requisitos
+- Java 17 ou superior
+- Maven 3.8.1 ou superior
 
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
+### Passos para inicializar
+1. Clone o repositório:
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
+   cd <NOME_DO_REPOSITORIO>
+   ```
 
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
+2. Compile o projeto:
+   ```bash
+   ./mvnw clean package
+   ```
 
+3. Execute a aplicação em modo de desenvolvimento:
+   ```bash
+   ./mvnw quarkus:dev
+   ```
 
-### RESTEasy JAX-RS
+4. Acesse a API em: [http://localhost:8080](http://localhost:8080)
 
-Easily start your RESTful Web Services
+---
 
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+## Tecnologias utilizadas
+- **Quarkus**: Framework Java para aplicações nativas em nuvem.
+- **Jakarta RESTful Web Services (JAX-RS)**: Para criação dos endpoints REST.
+- **Jakarta Transactions**: Para gerenciamento de transações.
+
+---
+
+## Estrutura do projeto
+- **`src/main/java`**: Código-fonte principal.
+- **`src/test/java`**: Testes unitários.
+- **`src/main/resources`**: Arquivos de configuração e recursos.
+
+---
+
+## Contribuição
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+
+---
+
+## Licença
+Este projeto está licenciado sob a licença MIT.
