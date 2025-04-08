@@ -14,9 +14,9 @@ Retorna uma lista de todas as transações.
   {
     "id": 1,
     "name": "Compra no supermercado",
-    "transactionTypeId": 2,
+    "transactionTypeId": 0,
     "transactionDate": "2023-10-01",
-    "amount": 150.75,
+    "amount": -150.75,
     "category": "Alimentação"
   }
 ]
@@ -24,7 +24,7 @@ Retorna uma lista de todas as transações.
 
 ---
 
-### Buscar transação por ID
+### Buscar lista transações por ID do tipo
 **GET** `/transactions/{id}`  
 Retorna uma lista com transações de um tipo específico.
 
