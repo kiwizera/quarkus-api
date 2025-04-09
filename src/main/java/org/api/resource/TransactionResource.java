@@ -24,7 +24,7 @@ public class TransactionResource {
     
     @GET
     @Path("/{transactionTypeId}")
-    public List<Transaction> findById(@PathParam("transactionTypeId") Integer transactionTypeId) {
+    public List<Transaction> findById(@PathParam("transactionTypeId") Long transactionTypeId) {
         List<Transaction> transactions = Transaction.findByTransactionTypeId(transactionTypeId);
         if (transactions == null) {
             throw new NotFoundException("Transação não encontrada com o transactionTypeId: " + transactionTypeId);
@@ -35,15 +35,20 @@ public class TransactionResource {
     @POST
     @Transactional
     public Response create(Transaction transaction) {
-        return Response.status(Response.Status.CREATED).entity(transaction).build();
+        transaction.persist();
+        if (transaction.transactionId != null) {
+            return Response.status(Response.Status.CREATED).entity(transaction).build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro ao criar a transação").build();
+        }
     }
 
     @PUT
-    @Path("/{id}")
-    public Transaction update(@PathParam("id") Long id, Transaction transaction) {
-        Transaction entity = Transaction.findById(id);
+    @Path("/{transactionId}")
+    public Transaction update(@PathParam("transactionId") Long transactionId, Transaction transaction) {
+        Transaction entity = Transaction.findById(transactionId);
         if (entity == null) {
-            throw new NotFoundException("Transação não encontrada com o ID: " + id);
+            throw new NotFoundException("Transação não encontrada com o transactionId: " + transactionId);
         }
 
         entity.name = transaction.name;
@@ -57,12 +62,12 @@ public class TransactionResource {
 
     @DELETE
     @Transactional
-    @Path("/{id}")
-    public Response delete(@PathParam("id") Long id) {
-        boolean deleted = Transaction.deleteById(id);
+    @Path("/{transactionId}")
+    public Response delete(@PathParam("transactionId") Long transactionId) {
+        boolean deleted = Transaction.deleteById(transactionId);
         if (deleted) {
             return Response.noContent().build();
         }
-        throw new NotFoundException("Transação não encontrada com o ID: " + id);
+        throw new NotFoundException("Transação não encontrada com o transactionId: " + transactionId);
     }
 }
